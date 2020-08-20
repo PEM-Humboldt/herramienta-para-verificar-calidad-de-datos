@@ -1,20 +1,14 @@
 ##Function for unify db of ANLA to Dwc standard
 
-#By: Cristian Cruz-Rodr√?guez 
+#By: Cristian Cruz-Rodr[i]guez 
 #Date: 26-03-2020
 
-###################
-##How up the data #
-###################
-
-## load the data
-
-#gdb<-list.dirs("C:/Cristian_data/ANLA/daatos entregado en el ANLA/BD_ANLA_BIOTICO_2020_03_05.gdb")
-#fc_list <- ogrListLayers(gdb)
-#x<-gdb
-
-## require gdb folder (x)
-
+' Extrae la informaci[o]n de las DGB con formato de la ANLA y la incorpora a la plantilla DwC
+#' 
+#' @param x archivo en formato 'gdb' (las tablas y archivos geogr[a]ficos deben contener los encabezados definidos por la ANLA).
+#' @return Datos obtenidos de \code{x} en plantilla con campos coincidentes siguiendo el par[a]metro DwC.
+#' @examples
+#' db_to_dwc(geodatabase)
 db_to_dwc<-function(x){
   
   library(data.table)
@@ -24,11 +18,9 @@ db_to_dwc<-function(x){
   library(stringi)
   
   #Geographical shapes
-  ####################
-  
   if ("PuntoMuestreoFauna" %in% ogrListLayers(x)) {
     
-    cat("  Puntos de Muestreo Fauna \n")
+    cat("\n Puntos de Muestreo Fauna\n")
     Pmf<-  as.data.frame(readOGR(dsn = x, layer ="PuntoMuestreoFauna"))
     colnames(Pmf)<-toupper(colnames(Pmf))
     
@@ -40,8 +32,7 @@ db_to_dwc<-function(x){
   } else NULL
   
   if ("TransectoMuestreoFauna" %in% ogrListLayers(x)) {
-    
-    cat("  Transeco de Muestreo Fauna \n")
+    cat(" \n Transeco de Muestreo Fauna \n ")
     tmf<- as.data.frame(as((readOGR(dsn = x, layer ="TransectoMuestreoFauna")),"SpatialPointsDataFrame"))
     tmf<-tmf[!duplicated(tmf$Lines.ID),]
     colnames(tmf)<-toupper(colnames(tmf))
@@ -55,8 +46,7 @@ db_to_dwc<-function(x){
   
   
   if ("PuntoMuestreoFlora" %in% ogrListLayers(x)) {
-    
-    cat("  Puntos de Muestreo Flora \n")
+    cat("\n  Puntos de Muestreo Flora \n")
     pmfr<-  as.data.frame(st_read(dsn = x, layer ="PuntoMuestreoFlora"))
     colnames(pmfr)<-toupper(colnames(pmfr))
     
@@ -68,11 +58,8 @@ db_to_dwc<-function(x){
   } else NULL  
   
   #tables with biological information  
-  ###################################
-  
   if ("MuestreoFaunaTB" %in% ogrListLayers(x)) {
-    
-    cat("  Datos de Muestreo Fauna  Punto\n")
+    cat("\n  Datos de Muestreo Fauna  Punto\n")
     mf1<-  as.data.frame(read_sf(dsn = x, layer ="MuestreoFaunaTB"))
     colnames(mf1)<-toupper(colnames(mf1))
     
@@ -86,7 +73,7 @@ db_to_dwc<-function(x){
   
   if ("MuestreoFaunaTB" %in% ogrListLayers(x)) {
     
-    cat("  Datos de Muestreo Fauna Transecto \n")
+    cat("\n  Datos de Muestreo Fauna Transecto \n")
     mf2<-  as.data.frame(st_read(dsn = x, layer ="MuestreoFaunaTB"))
     colnames(mf2)<-toupper(colnames(mf2))
     
@@ -100,7 +87,7 @@ db_to_dwc<-function(x){
   
   if ("MuestreoFloraRegeneracionTB" %in% ogrListLayers(x)) {
     
-    cat("  Datos de Muestreo Flora  \n")
+    cat(" \n Datos de Muestreo Flora  \n")
     mfr<-  as.data.frame(st_read(dsn = x, layer ="MuestreoFloraRegeneracionTB"))
     colnames(mfr)<-toupper(colnames(mfr))
     
@@ -113,8 +100,7 @@ db_to_dwc<-function(x){
   
     if ("MuestreoFloraFustalTB" %in% ogrListLayers(x)) {
   
-  cat("  Datos de Muestreo Flora Fustal  \n")
-      cat("  Datos de Muestreo Flora Fustal  \n")
+  cat("\n  Datos de Muestreo Flora Fustal  \n")
       mff<-  as.data.frame(st_read(dsn = x, layer ="MuestreoFloraFustalTB"))
       colnames(mff)<-toupper(colnames(mff))
       
@@ -147,26 +133,20 @@ db_to_dwc<-function(x){
     a<-merge(pmfr, mfr, by ='eventID', all.x = F, all.y = F)
     b<-merge(pmfr, mff, by ='eventID', all.x = F, all.y = F)
     c<-rbind(a,b)
+    output<-rbind(output, c)
     } else if(exists('pmfr') & exists('mfr') & !exists('mff')){
     c<-merge(pmfr, mfr, by ='eventID', all.x = F, all.y = F)
+    output<-rbind(output, c)
   } else if(exists('pmfr') & exists('mff') & !exists('mfr')){
-    c<-merge(pmfr, mff, by ='eventID', all.x = F, all.y = F)  
+    c<-merge(pmfr, mff, by ='eventID', all.x = F, all.y = F)
+    output<-rbind(output, c)
   } else NULL
   
   ## Fauna and Flora records
-  output<-rbind(output, c)
-  output$verbatimCoordinateSystem<- 'MAGNA-SIRGAS / Colombia Bogota zone'
+  output$verbatimCoordinateSystem<- 'MAGNA-SIRGAS / Unknown Origin'
   
-  cat("  correciÛn codificaciÛn  \n")
-  output$vernacularName<-stri_encode(output$vernacularName, 'UTF-8')
-  output$locality<-stri_encode(output$locality, 'UTF-8')
-  output$parentEventID<-stri_encode(output$parentEventID, 'UTF-8')
-  output$habitat<-stri_encode(output$habitat, 'UTF-8')
-  output$samplingEffort<-stri_encode(output$samplingEffort, 'UTF-8')
-  output$waterBody<-stri_encode(output$waterBody, 'UTF-8')
-  output$locality<-stri_encode(output$locality, 'UTF-8')
+  cat("\n  Proceso Terminado \n ")
+  
   
   return(output)
 }
-
-write.csv(output, 'C:/Cristian_data/ANLA/daatos entregado en el ANLA/data_anla.csv', fileEncoding = 'UTF-8')
