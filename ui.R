@@ -7,20 +7,33 @@ shinyUI(pageWithSidebar(
   sidebarPanel(
 
     tags$p(),
-    tags$p("En este apartado podrá seleccionar una GeoDataBase para que los archivos de las \n 
+    tags$p("En este apartado podrá seleccionar una GeoDataBase para que los archivos de las \n
            colectas y los registros obtenidos, tanto de fauna, como de flora, puedan ser \n
            unificados en una plantilla que cumpla con el formato Darwin Core. Tenga en cuenta\n
            que para su correcta ejecucción, tanto los archivos, como las columnas en las tablas\n
            y los archivos geográficos deben mantener los nombres definidos por la Agencia \n
            Nacional de Licencias Ambientales (ANLA)"),
-    
+
     tags$hr(),
     tags$p(),
     helpText(" Seleccione la GDB a estructurar"),
     shinyDirButton("directory", "Seleccione su GDB", "por favor selecione la GDB"),
-    
-    tags$p(),  
-    tags$p(), 
+
+    tags$hr(),
+    tags$p(),
+    helpText("Seleccione el origen de coordenadas"),
+    selectInput("coordSrc", NULL,
+      choices = c(
+        "Este - Este" = "este_este",
+        "Este" = "este",
+        "Bogotá" = "bogota",
+        "Oeste" = "oeste",
+        "Oeste - Oeste" = "oeste_oeste"
+      )
+    ),
+    actionButton("tranformBtn", "Transformar"),
+
+    tags$hr(),
     tags$p(),
     helpText(" Seleccione el formato de descarga"),
     radioButtons("type", "Tipo de Formato:",
@@ -33,6 +46,6 @@ shinyUI(pageWithSidebar(
     tags$p(HTML("Datos identificados y migrados a la plantilla DwC, recuerde que dependiendo el volumen de los datos, este proceso puede tardar varios minutos\n")),
     tableOutput("outTable"),
   )
-))  
+))
 
 
