@@ -11,4 +11,4 @@ new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"
 if(length(new.packages)) install.packages(new.packages, repos = "http://cran.us.r-project.org")
 
 library(shiny)
-runApp(launch.browser = TRUE)
+runApp(port = 8080)
