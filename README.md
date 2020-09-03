@@ -1,5 +1,5 @@
 # BioRegistros-app
-Herramienta para la verificación geográfica y taxonómica de registros biológicos. :D
+Herramienta para la verificación geográfica y taxonómica de registros biológicos.
 
 V0.1.0
 
