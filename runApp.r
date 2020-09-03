@@ -6,7 +6,7 @@ if (WD != "") {
 if (LP != "") {
   .libPaths(LP)
 }
-list.of.packages <- c("shiny", "shinyFiles", "data.table", "rgdal", "sf", "dplyr", "stringi")
+list.of.packages <- c("shiny", "shinyFiles", "data.table", "rgdal", "sf", "dplyr", "stringi", "DT", "fs")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, repos = "http://cran.us.r-project.org")
 
