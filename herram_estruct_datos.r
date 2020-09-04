@@ -98,11 +98,13 @@ trans.coord<-function(data=x, id= x$x,  lon= x$x, lat= x$x,coordreference = NA) 
 }
 
 #corr.geonames(function) Convierte los los departamentos y municipios a texto, cuando estos son c[o]digos usando el formato definido por el DANE
-corr.geonames<- function(data = x, depto = x$x, mpio =x$x, routineType = NULL) {
-  
-  if (is.null(routineType)){
-    stop(paste( "Debe definirse la ruta donde se encuentra el archivo 'divipola_codes.rs'" ))
-} else load(paste0(routineType, '/divipola_codes.rds'))
+corr.geonames<- function(data = x, depto = x$x, mpio =x$x) {
+  routineType<- getwd()
+  if (!file.exists("divipola_codes.rds")){
+   stop(paste("Debe adherirse el archivo 'divipola_codes.rds' a la carpeta de trabajo"))
+  } else if (file.exists('divipola_codes.rds')){
+    load(paste0(routineType, '/divipola_codes.rds'))
+  }
 
   cat(" \n  Conversi[o]n de datos politico-administrativos  \n")
   library(Hmisc)

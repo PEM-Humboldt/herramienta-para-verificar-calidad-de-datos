@@ -43,8 +43,7 @@ shinyServer(function(input, output, session) {
     estr_dt<-dsimput()
 
     if (input$dividata == 1) {
-      datapol<- corr.geonames(data =estr_dt, depto = estr_dt$stateProvince,  mpio =  estr_dt$county,
-                              routineType = 'G:/Cristian_data/Humboldt/Proyectos/2020/ANLA/Sninny/bioregistros-app/' )
+      datapol<- corr.geonames(data =estr_dt, depto = estr_dt$stateProvince,  mpio =  estr_dt$county )
       if (input$dataajust == 1) {
         validate(need(datapol, ""))
         adddata<- add.corr.dt(data = datapol)}
@@ -109,13 +108,13 @@ shinyServer(function(input, output, session) {
 
   #visualizate  ajusted data
   output$tbTranform <- renderDataTable({
-    if (!is.null(tbTranform()) && is.null(tbCoords()) ){
+    if (!is.null(tbTranform()) & is.null(tbCoords()) ){
     datatable(tbTranform(),
               options = list(
                 pageLength = 3,
                 lengthMenu = c(2, 12, 18),
                 searching= FALSE))
-    }else if ( !is.null(tbTranform()) && !is.null(tbCoords()) ){
+    }else if ( !is.null(tbTranform()) & !is.null(tbCoords()) ){
       datatable(tbCoords(),
                 options = list(
                   pageLength = 3,
