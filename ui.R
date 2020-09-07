@@ -58,7 +58,17 @@ shinyUI(pageWithSidebar(
                                 radioButtons("type2", "",
                                              choices = c("Excel (CSV)", "Texto (TSV)", "Texto (Separado por espacios)")),
                                 downloadButton("downloadData2", "Guardar como")
-                                 ),  
+                                 ),
+
+               conditionalPanel(condition="input.tabselected==5",
+                                tags$p("Seleccione el archivo comprimido (.zip) con el
+                                Shapefile del polígono y dé click en el botón 'Consultar'
+                                para obtener el listado de especies presentes en la zona.
+                                En caso de que no haya ninguna especie, la tabla
+                                aparecerá vacía."),
+                                fileInput("shapeBiomodelos", "Shapefile", accept = ".zip"),
+                                actionButton("intersectBiomodelos", "Consultar")
+               )
                
   ),# sidebarPanel bracket
   
@@ -86,6 +96,7 @@ shinyUI(pageWithSidebar(
                div(dataTableOutput("estrTable"), style = "font-size:80%")
       ),
       tabPanel('Verificacion Geografica', value = 4),
+      tabPanel("BioModelos", value = 5),
       id = "tabselected"
 
 )  # Tabset Panel bracket
