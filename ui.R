@@ -61,12 +61,9 @@ shinyUI(pageWithSidebar(
                                  ),
 
                conditionalPanel(condition="input.tabselected==5",
-                                tags$p("Seleccione el archivo comprimido (.zip) con el
-                                Shapefile del polígono y dé click en el botón 'Consultar'
-                                para obtener el listado de especies presentes en la zona.
-                                En caso de que no haya ninguna especie, la tabla
-                                aparecerá vacía."),
-                                fileInput("shapeBiomodelos", "Shapefile", accept = ".zip"),
+                                fileInput("shapeBiomodelos", "Shapefile (.zip)",
+                                          accept = ".zip", buttonLabel = "Seleccionar",
+                                          placeholder = "Ningún archivo seleccionado."),
                                 actionButton("intersectBiomodelos", "Consultar")
                )
                
@@ -96,7 +93,14 @@ shinyUI(pageWithSidebar(
                div(dataTableOutput("estrTable"), style = "font-size:80%")
       ),
       tabPanel('Verificacion Geografica', value = 4),
-      tabPanel("BioModelos", value = 5),
+
+      tabPanel("BioModelos", value = 5,
+               tags$h4("Cruzar área de interés con información de BioModelos"),
+               tags$p("En este apartado podrá seleccionar un Shapefile con el polígono
+               del área de interés y obtener el listado de especies presentes en la
+               zona."),
+               div(dataTableOutput("tableBiomodelos"), style = "font-size: 80%")
+      ),
       id = "tabselected"
 
 )  # Tabset Panel bracket
