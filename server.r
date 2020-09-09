@@ -10,6 +10,7 @@ library(DT)
 
 source("db_to_dwc_simp.r") #Pass from GDB to DWC format the data
 source("herram_estruct_datos.r") # Add missing columns and trasform states, counties and coordinates to DwC Standard
+source("taxon_valid.R", local = TRUE) # Name validation funtion
 load('divipola_codes.rds') # Divipola Conventions from States and counties 
 shinyServer(function(input, output, session) {
   volumes <- c(Home = fs::path_home(), "R Installation" = R.home(), getVolumes()())
@@ -150,5 +151,38 @@ shinyServer(function(input, output, session) {
       sep<- switch (input$type2, "Excel (CSV)" = ",", "Texto (TSV)" = "\t", "Text (Separado por espacios)" = " ")
       
       write.csv(tbCoords(), file2, row.names = FALSE)})
-  
+    
+  # New panel scientific name validation
+    output$contents <- renderTable({
+      
+      withProgress(message = 'Name Validation', 
+                   detail = 'This may take a while...', value = 0, {
+                     # Number of times we'll go through the loop
+                     n <- 10
+                     
+                     for (i in 1:n) {
+                       # Each time through the loop, add another row of data. This is
+                       # a stand-in for a long-running computation.
+                       validList <<- tax_res(myList$scientificName)
+                       
+                       # Increment the progress bar, and update the detail text.
+                       incProgress(1/n, detail = paste("Doing part", i))
+                       
+                       # Pause for 0.1 seconds to simulate a long computation.
+                       Sys.sleep(0.1)
+                       return(validList)
+                     }
+                   })
+      
+      #output$downloadData <- downloadHandler(
+      #  filename = function() { 
+      # paste(validList, '.csv', sep='') 
+      #},
+      #content = function(file) {
+      #  write.csv(validList(), file)
+      #}
+      #  )
+      
+    })
+    
 })
