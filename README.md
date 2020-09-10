@@ -11,12 +11,12 @@ A continuación se presentan instrucciones para ejecutar el proyecto en su máqu
 
 Es necesario tener instalado:
 
-* R v3.6.3+
+* [R v3.6.3+](https://www.r-project.org/)
 * [GDAL](https://gdal.org/)
 
 ### Instalación y ejecución
 
-La aplicación verifica e instala otros paquetes de R en caso de que sean necesarios. Sin embargo, puede suceder que algún paquete requiera una librería del sistema, esto se verá reflejado en el log de errores al ejecutar la aplicación.
+La aplicación verifica e instala otros paquetes de R en caso de que sean necesarios. Sin embargo, puede suceder que algún paquete requiera una librería del sistema, esto se verá reflejado en el log de errores al ejecutar la aplicación. Específicamente, el paquete `sf` requiere algunas librerías. Una guía para instalarlas en diferentes sistemas operativos se encuentra [acá](https://r-spatial.github.io/sf/#installing).
 
 La aplicación lee dos variables de ambiente para determinar el directorio de trabajo (*WORK_DIR*) y la ruta de instalación de dependencias (*LIB_PATH*), si estas no se han configurado al momento de ejecución, se tomarán los valores por defecto en el sistema.
 
@@ -33,9 +33,7 @@ WORK_DIR=/home/esuarez/bioregistros/bioregistros-app LIB_PATH=/home/esuarez/R R 
 ```
 
 #### Windows
-*...en construcción*
-
-Una vez se está ejecutanto se puede acceder a la aplicación desde el navegador en [htttp://localhost:8080](htttp://localhost:8080)
+Para ejecutar la aplicación en Windows, ejecute el script `runApp.r` desde la carpeta donde se encuentra el archivo. Esto abrirá una pestaña en su navegador por defecto con la aplicación.
 
 
 ## Despliegue
