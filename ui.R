@@ -60,11 +60,25 @@ shinyUI(pageWithSidebar(
                                 downloadButton("downloadData2", "Guardar como")
                                  ),
 
+
                conditionalPanel(condition="input.tabselected==5",
-                                fileInput("shapeBiomodelos", "Shapefile (.zip)",
-                                          accept = ".zip", buttonLabel = "Seleccionar",
-                                          placeholder = "Ningún archivo seleccionado."),
-                                actionButton("intersectBiomodelos", "Consultar")
+                                h1("Ingrese puntos:"),
+                                numericInput("long", label = h3("Longitud:"), value = -73.839222),
+                                numericInput("lat", label = h3("Latitud:"), value = 4.721806),
+                                actionButton("locality", "Mapear"),
+                                p(),
+                                downloadButton("downloadDataBioMAD", "Descargar"),
+                                p(),
+                                p("BioMAD -BioModelos Apoya Decisiones-, es una
+                                  herramienta desarrollada para generar listados preliminares
+                                  de especies a partir de la consulta de los mapas validados
+                                  disponibles en BioModelos."),
+                                p("Se sugiere usar con prudencia los listados generados.
+                                  Si desea conocer las distribuciones de las especies listadas,
+                                  por favor consulte",
+                                  a("BioModelos.", href = "http://biomodelos.humboldt.org.co/")),
+                                "Modulo creado por Elkin A. Noguera-Urbano usando",
+                                a("Shiny.", href = "http://shiny.rstudio.com")
                )
                
   ),# sidebarPanel bracket
@@ -94,12 +108,12 @@ shinyUI(pageWithSidebar(
       ),
       tabPanel('Verificacion Geografica', value = 4),
 
-      tabPanel("BioModelos", value = 5,
-               tags$h4("Cruzar área de interés con información de BioModelos"),
-               tags$p("En este apartado podrá seleccionar un Shapefile con el polígono
-               del área de interés y obtener el listado de especies presentes en la
-               zona."),
-               div(dataTableOutput("tableBiomodelos"), style = "font-size: 80%")
+      tabPanel("BioMAD", value = 5,
+               leafletOutput("mymap"),
+               p(),
+               fluidRow(
+                 column(4, DT::dataTableOutput("table"))
+               )
       ),
       id = "tabselected"
 
