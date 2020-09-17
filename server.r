@@ -1,5 +1,7 @@
 library(shiny)
 library(shinyFiles)
+library(leaflet)
+library(mapview)
 library(fs)
 library(data.table)
 library(rgdal)
@@ -7,6 +9,7 @@ library(sf)
 library(dplyr)
 library(stringi)
 library(DT)
+library(raster)
 
 source("db_to_dwc_simp.r") #Pass from GDB to DWC format the data
 source("herram_estruct_datos.r") # Add missing columns and trasform states, counties and coordinates to DwC Standard
@@ -150,5 +153,63 @@ shinyServer(function(input, output, session) {
       sep<- switch (input$type2, "Excel (CSV)" = ",", "Texto (TSV)" = "\t", "Text (Separado por espacios)" = " ")
       
       write.csv(tbCoords(), file2, row.names = FALSE)})
-  
+
+
+  #--- Fifth tab (BioMAD) ---#
+
+  # Crea formato para los datos de la lacalidad ingresados por el usuario.
+  points <- eventReactive(input$locality, {
+    loc_user<-cbind(input$long, input$lat)
+    print(loc_user)
+    }, ignoreNULL = FALSE)
+
+
+  # Dibuja el mapa en el panel principal.
+  output$mymap <- renderLeaflet({
+    leaflet() %>%
+      setView(lat = 4.721806, lng = -73.839222, zoom = 7) %>%
+      addTiles() %>%
+      addEasyButton(easyButton(
+        icon="fa-globe", title="Zoom to Level 5",
+        onClick=JS("function(btn, map){ map.setZoom(5); }"))) %>%
+        addMarkers(data = points())
+  })
+
+  # Dibuja la localidad base en el mapa.
+  observeEvent(input$locality,{
+    isolate({
+      new_zoom <- 10
+      if(!is.null(input$map_zoom)) new_zoom <- input$map_zoom
+      leafletProxy('mymap') %>%
+        setView(lng = input$long, lat = input$lat, zoom = new_zoom)
+    })
+  })
+
+  # Carga la localidad y cruza con shapefiles BioModelos.
+  # spec_cross representa la tabla producto del cruce BioModelos * localidad.
+  spec_cross <-eventReactive(input$locality, {
+    temp<-cbind(input$long, input$lat)
+    temp<-as.data.frame(temp)
+    colnames(temp)<-c("x","y")
+    temp <- SpatialPointsDataFrame(temp,temp)
+    crs(temp) <- "+proj=longlat +datum=WGS84 +no_defs"
+    maps<-readOGR("./appData/Biom_UICN.shp") # Cargar archivo shapefile BioModelos.
+    as.data.frame(over(temp,maps,returnList = TRUE))
+    })
+
+  # Muestra la tabla en el panel principal.
+  # Table of selected dataset ----
+  output$table <- DT::renderDataTable({
+    spec_cross()
+  })
+
+  # Permite descargar la tabla "Downloadable csv" resultante.
+  output$downloadDataBioMAD <- downloadHandler(
+    filename = function() {
+      paste("Especies sugeridas",date(),".csv", sep = " ")
+    },
+    content = function(file) {
+      write.table(spec_cross(), file, row.names = FALSE,sep = ",")
+    }
+  )
 })
