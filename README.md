@@ -35,6 +35,17 @@ WORK_DIR=/home/esuarez/bioregistros/bioregistros-app LIB_PATH=/home/esuarez/R R 
 #### Windows
 Para ejecutar la aplicación en Windows, ejecute el script `runApp.r` desde la carpeta donde se encuentra el archivo. Esto abrirá una pestaña en su navegador por defecto con la aplicación.
 
+## Despliegue
+El aplicativo sólo corre localmente.
+
+## Estructura de archivos
+
+| Archivo/Carpeta  | Descripción |
+|------------------|-------------|
+| Verif_geografica | Lógica relacionada con la valiación geográfica de los datos |
+| db_to_dwc_simp.r | Conversión de GDB a Darwin Core |
+| herram_estruct_datos.r | Correciones y transformaciones sobre los datos |
+| runApp.r | Punto de arranque para la aplicación |
 
 ## Autores
 
