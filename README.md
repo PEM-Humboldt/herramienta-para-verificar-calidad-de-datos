@@ -58,7 +58,7 @@ El aplicativo sólo corre localmente.
 * **Elkin A. Noguera-Urbano** - [elkalexno](https://github.com/elkalexno)
 * **María Helena Olaya-Rodríguez** - [heleolaya](https://github.com/heleolaya)
 * **Juan Carlos Rey** - [biorey](https://github.com/biorey)
-* **Erika Suárez** - [eriaksv](https://github.com/erikasv)
+* **Erika Suárez** - [erikasv](https://github.com/erikasv)
 * **Jorge Velásquez-Tibatá**
 * **Marcelo Villa** - [marcelo-villa-p](https://github.com/marcelo-villa-p)
 
