@@ -40,19 +40,28 @@ El aplicativo sólo corre localmente.
 
 ## Estructura de archivos
 
-| Archivo/Carpeta  | Descripción |
-|------------------|-------------|
-| Verif_geografica | Lógica relacionada con la valiación geográfica de los datos |
-| db_to_dwc_simp.r | Conversión de GDB a Darwin Core |
+| Archivo                | Descripción |
+|------------------------|-------------|
+| db_to_dwc_simp.r       | Conversión de GDB a Darwin Core |
 | herram_estruct_datos.r | Correciones y transformaciones sobre los datos |
-| runApp.r | Punto de arranque para la aplicación |
+| runApp.r               | Punto de arranque para la aplicación |
 
 ## Autores
 
+* **Carolina Bello**
+* **Carolina Castro**
+* **Iván González**
 * **Cristian Cruz** - [crcruzr](https://github.com/crcruzr)
 * **Helena Olaya** - [heleolaya](https://github.com/heleolaya)
+* **Maria Cecilia Londoño**
+* **Daniel López** - [danflop](https://github.com/danflop)
+* **Elkin A. Noguera-Urbano** - [elkalexno](https://github.com/elkalexno)
+* **María Helena Olaya-Rodríguez** - [heleolaya](https://github.com/heleolaya)
+* **Juan Carlos Rey** - [biorey](https://github.com/biorey)
+* **Erika Suárez** - [eriaksv](https://github.com/erikasv)
+* **Jorge Velásquez-Tibatá**
+* **Marcelo Villa** - [marcelo-villa-p](https://github.com/marcelo-villa-p)
 
-Consulte también la lista de [colaboradores](https://github.com/PEM-Humboldt/bioregistros-app/contributors) que participaron en este proyecto.
 
 ## Licencia
 
