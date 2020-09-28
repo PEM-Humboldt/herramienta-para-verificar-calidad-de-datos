@@ -166,10 +166,14 @@ shinyServer(function(input, output, session) {
       set3 <- set2[, c("scriptID", "scientificName", "country", "stateProvince", "county", "decimalLatitude", "decimalLongitude")]
       colnames(set3) <- c("scriptID", "nombre", "pais", "departamento", "municipio", "latitud", "longitud")
       verif <- VERIFICACION_PAISES(set3, routineType = "Colombia")
-      verifTable <- verif[[1]]
+      verifTable <<- verif[[1]]
     })
   })
-
+  
+  output$downloadGVOutput <- downloadHandler(filename = "resultado_validacion_geografica.csv",
+                                             content = function(file){
+                                               write.csv(verifTable, file, row.names = FALSE)
+                                             })
   
   #--- Fifth tab (BioModelos) ---#
 

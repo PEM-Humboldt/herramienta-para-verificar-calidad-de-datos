@@ -69,7 +69,9 @@ shinyUI(pageWithSidebar(
                                                      "text/comma-separated-values,text/plain",
                                                      ".csv")
                                           ),
-                                actionButton("runGV", "Validar datos")
+                                actionButton("runGV", "Validar datos"),
+                                p(),
+                                downloadButton("downloadGVOutput", "Descargar datos validados")
                                 ),
 
                conditionalPanel(condition="input.tabselected==5",
