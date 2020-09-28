@@ -161,7 +161,7 @@ shinyServer(function(input, output, session) {
     output$gvOutput <- renderDataTable({
       req(input$gvInput)
       gvFile <- input$gvInput
-      set2 <<- read.csv(gvFile$datapath, colClasses = "character")
+      set2 <<- as.data.frame(fread(gvFile$datapath, colClasses = "character", header = TRUE, encoding = "Latin-1"))
       set2$scriptID <<- 1:nrow(set2)
       set3 <- set2[, c("scriptID", "scientificName", "country", "stateProvince", "county", "decimalLatitude", "decimalLongitude")]
       colnames(set3) <- c("scriptID", "nombre", "pais", "departamento", "municipio", "latitud", "longitud")
