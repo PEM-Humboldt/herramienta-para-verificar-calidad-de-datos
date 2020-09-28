@@ -13,6 +13,7 @@ VERIFICACION_PAISES <- function(set3, routineType, maxchar = 0.2, rdata = FALSE,
   #paises <- paises[, c('NAME_0', 'NAME_1', 'NAME_2', 'ISO2', 'ISO3')]
   #paises@data <- as.data.frame(apply(paises@data, 2, function(x) {iconv(x, from = 'latin1', to ='UTF-8')}))
   if (routineType == "Colombia") {
+    mpios2017 <- mpios2017[, c('MPIO_CNMBR')]
     mpios2014 <- mpios2014[, c('MPIOS')]
     mpios2011 <- mpios2011[, c('MPIOS')]
     mpios2003 <- mpios2003[, c('MPIOS')]
@@ -93,93 +94,104 @@ VERIFICACION_PAISES <- function(set3, routineType, maxchar = 0.2, rdata = FALSE,
     select <- which(set6col$scriptID %in% bien_mun$ID[which(is.na(bien_mun$bien_mun))])
     
     if(length(select) > 0){
-      cat("    Evaluating municipality match (2014)", "\n")
+      cat("    Evaluating municipality match (2017)", "\n")
       set6A <- set6col[select, ]
       #set6A$municipio <- iconv(set6A$municipio, from = 'latin1', to ='UTF-8')
-      over2014 <- over(set6A, mpios2014)
+      over2017 <- over(set6A, mpios2017)
       #over2014$MPIOS <- iconv(over2014$MPIOS, from = 'latin1', to ='UTF-8')
-      I <- corroboracion(overPointsField = over2014$MPIOS, dataField = set6A$municipio, 
+      I <- corroboracion(overPointsField = over2017$MPIOS, dataField = set6A$municipio, 
                          dataID = set6A$scriptID, maxchar = scriptMaxchar) 
       bien_mun$bien_mun[bien_mun$ID %in% I[[1]]] <- 1
-      bien_mun$Mapa[bien_mun$ID %in% I[[1]]]  <- 'CO:2014'
+      bien_mun$Mapa[bien_mun$ID %in% I[[1]]]  <- 'CO:2017'
       #sugerencia_mun <- I[[3]]
-      rm(over2014, I, set6A, mpios2014)
+      rm(over2017, I, set6A, mpios2017)
       
       
       select <- which(set6col$scriptID %in% bien_mun$ID[which(is.na(bien_mun$bien_mun))])
+      
       if(length(select) > 0){
-        cat("    Evaluating municipality match (2011)", "\n")
+        cat("    Evaluating municipality match (2014)", "\n")
         set6A <- set6col[select, ]
-        over2011 <- over(set6A, mpios2011)
+        over2014 <- over(set6A, mpios2014)
         #over2011$MPIOS <- iconv(over2011$MPIOS, from = 'latin1', to ='UTF-8')
-        H <- corroboracion(overPointsField = over2011$MPIOS, dataField = set6A$municipio, 
+        H <- corroboracion(overPointsField = over2014$MPIOS, dataField = set6A$municipio, 
                            dataID = set6A$scriptID, maxchar = scriptMaxchar) 
         bien_mun$bien_mun[bien_mun$ID %in% H[[1]]] <- 1
-        bien_mun$Mapa[bien_mun$ID %in% H[[1]]]  <- 'CO:2011'
-        rm(H, over2011, set6A, mpios2011) 
+        bien_mun$Mapa[bien_mun$ID %in% H[[1]]]  <- 'CO:2014'
+        rm(H, over2014, set6A, mpios2014) 
         
         select <- which(set6col$scriptID %in% bien_mun$ID[which(is.na(bien_mun$bien_mun))])
         if(length(select) > 0){
-          cat("    Evaluating municipality match (2003)", "\n")
+          cat("    Evaluating municipality match (2011)", "\n")
           set6A <- set6col[select, ]
-          over2003 <- over(set6A, mpios2003)
+          over2011 <- over(set6A, mpios2011)
           #over2003$MPIOS <- iconv(over2003$MPIOS, from = 'latin1', to ='UTF-8')
-          G <- corroboracion(overPointsField = over2003$MPIOS, dataField = set6A$municipio, 
+          G <- corroboracion(overPointsField = over2011$MPIOS, dataField = set6A$municipio, 
                              dataID = set6A$scriptID, maxchar = scriptMaxchar) 
           bien_mun$bien_mun[bien_mun$ID %in% G[[1]]] <- 1
-          bien_mun$Mapa[bien_mun$ID %in% G[[1]]]  <- 'CO:2003'
-          rm(G, over2003, set6A, mpios2003)
+          bien_mun$Mapa[bien_mun$ID %in% G[[1]]]  <- 'CO:2011'
+          rm(G, over2011, set6A, mpios2011)
           
           select <- which(set6col$scriptID %in% bien_mun$ID[which(is.na(bien_mun$bien_mun))])
           if(length(select)>0){
-            cat("    Evaluating municipality match (1993)", "\n")
+            cat("    Evaluating municipality match (2003)", "\n")
             set6A <- set6col[select, ]
-            over1993 <- over(set6A, mpios1993)
-            E <- corroboracion(overPointsField = over1993$MPIOS, dataField = set6A$municipio, 
+            over2003 <- over(set6A, mpios2003)
+            E <- corroboracion(overPointsField = over2003$MPIOS, dataField = set6A$municipio, 
                                dataID = set6A$scriptID, maxchar = scriptMaxchar) 
             
             bien_mun$bien_mun[bien_mun$ID %in% E[[1]]] <- 1
-            bien_mun$Mapa[bien_mun$ID %in% E[[1]]] <- 'CO:1993'
-            rm(E, set6A, over1993, mpios1993)
+            bien_mun$Mapa[bien_mun$ID %in% E[[1]]] <- 'CO:2003'
+            rm(E, set6A, over2003, mpios2003)
             
             
             select <- which(set6col$scriptID %in% bien_mun$ID[which(is.na(bien_mun$bien_mun))])
             if(length(select)>0){
-              cat("    Evaluating municipality match (1985)", "\n")
+              cat("    Evaluating municipality match (1993)", "\n")
               set6A <- set6col[select, ]
-              over1985 <- over(set6A, mpios1985)
-              D <- corroboracion(overPointsField = over1985$MPIOS, dataField = set6A$municipio, 
+              over1993 <- over(set6A, mpios1993)
+              D <- corroboracion(overPointsField = over1993$MPIOS, dataField = set6A$municipio, 
                                  dataID = set6A$scriptID, maxchar = scriptMaxchar) 
               
               bien_mun$bien_mun[bien_mun$ID %in% D[[1]]] <- 1
-              bien_mun$Mapa[bien_mun$ID %in% D[[1]]] <- 'CO:1985'
-              rm(D, mpios1985, over1985, set6A)
+              bien_mun$Mapa[bien_mun$ID %in% D[[1]]] <- 'CO:1993'
+              rm(D, mpios1993, over1993, set6A)
               
               
               select <- which(set6col$scriptID %in% bien_mun$ID[which(is.na(bien_mun$bien_mun))])
               if(length(select)>0){
-                cat("    Evaluating municipality match (1973)", "\n")
+                cat("    Evaluating municipality match (1985)", "\n")
                 set6A <- set6col[select, ]
-                over1973 <- over(set6A, mpios1973)
-                C <- corroboracion(overPointsField = over1973$MPIOS, dataField = set6A$municipio, 
+                over1985 <- over(set6A, mpios1985)
+                C <- corroboracion(overPointsField = over1985$MPIOS, dataField = set6A$municipio, 
                                    dataID = set6A$scriptID, maxchar = scriptMaxchar) 
-                
                 bien_mun$bien_mun[bien_mun$ID %in% C[[1]]] <- 1
-                bien_mun$Mapa[bien_mun$ID %in% C[[1]]] <- 'CO:1973'
-                rm(C, set6A, mpios1973, over1973)
+                bien_mun$Mapa[bien_mun$ID %in% C[[1]]] <- 'CO:1985'
+                rm(C, set6A, mpios1985, over1985)
                 
                 
                 select <- which(set6col$scriptID %in% bien_mun$ID[which(is.na(bien_mun$bien_mun))])
                 if(length(select)>0){
-                  cat("    Evaluating municipality match (1964)", "\n")
+                  cat("    Evaluating municipality match (1973)", "\n")
                   set6A <- set6col[select, ]
-                  over1964 <- over(set6A, mpios1964)
-                  B <- corroboracion(overPointsField = over1964$MPIOS, dataField = set6A$municipio, 
+                  over1973 <- over(set6A, mpios1973)
+                  B <- corroboracion(overPointsField = over1973$MPIOS, dataField = set6A$municipio, 
                                      dataID = set6A$scriptID, maxchar = scriptMaxchar) 
                   bien_mun$bien_mun[bien_mun$ID %in% B[[1]]] <- 1
-                  bien_mun$Mapa[bien_mun$ID %in% B[[1]]] <- 'CO:1964'
-                  rm(B, set6A, over1964, mpios1964)
+                  bien_mun$Mapa[bien_mun$ID %in% B[[1]]] <- 'CO:1973'
+                  rm(B, set6A, over1973, mpios1973)
                   
+                  select <- which(set6col$scriptID %in% bien_mun$ID[which(is.na(bien_mun$bien_mun))])
+                  if(length(select)>0){
+                    cat("    Evaluating municipality match (1964)", "\n")
+                    set6A <- set6col[select, ]
+                    over1964 <- over(set6A, mpios1964)
+                    A <- corroboracion(overPointsField = over1964$MPIOS, dataField = set6A$municipio, 
+                                       dataID = set6A$scriptID, maxchar = scriptMaxchar) 
+                    bien_mun$bien_mun[bien_mun$ID %in% B[[1]]] <- 1
+                    bien_mun$Mapa[bien_mun$ID %in% B[[1]]] <- 'CO:1964'
+                    rm(A, set6A, over1964, mpios1964)
+                  }
                 }
               }
             }
