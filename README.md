@@ -21,6 +21,11 @@ La aplicación verifica e instala otros paquetes de R en caso de que sean necesa
 La aplicación lee dos variables de ambiente para determinar el directorio de trabajo (*WORK_DIR*) y la ruta de instalación de dependencias (*LIB_PATH*), si estas no se han configurado al momento de ejecución, se tomarán los valores por defecto en el sistema.
 
 #### Ubuntu
+
+##### Prerrequisitos
+* libfontconfig1-dev
+* libcairo2-dev
+
 Para ejecutar en ubuntu se puede usar RScripts:
 
 ```
