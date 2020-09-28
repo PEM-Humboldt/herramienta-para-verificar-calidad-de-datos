@@ -1,4 +1,4 @@
-# BioRegistros-app
+# Herramienta para verificar calidad de datos
 Herramienta para la verificación geográfica y taxonómica de registros biológicos.
 
 V0.1.0
