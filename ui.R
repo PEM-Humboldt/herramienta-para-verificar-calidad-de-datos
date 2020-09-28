@@ -4,7 +4,10 @@ library(leaflet)
 
 shinyUI(pageWithSidebar(
   headerPanel("Herramienta para verificar calidad de datos"),
-  sidebarPanel(tags$strong("Panel de opciones"),
+  sidebarPanel(img(src = "logo.png",  style = "width:25%;"),
+               p(),
+               hr(),
+               tags$strong("Panel de opciones"),
                br(),
                br(),
                conditionalPanel(condition="input.tabselected==1",
