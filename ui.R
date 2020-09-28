@@ -63,15 +63,26 @@ shinyUI(pageWithSidebar(
 
                
                conditionalPanel(condition="input.tabselected==4",
+                                p("Este modulo permite verificar que el municipio
+                                  y departamento asociado a cada registro corresponda
+                                  con sus coordenadas. El proceso agrega unas columnas
+                                  con municipios y departamentos recomendados para
+                                  aquellos registros donde no hay una congruencia. Para
+                                  ejecutar la verificacion asegurese de subir una tabla
+                                  con los datos estructurados en formato csv y haga click
+                                  en el boton de Verificar datos."),
                                 fileInput("gvInput", "Seleccione el archivo CSV",
                                           multiple = FALSE,
                                           accept = c("text/csv",
                                                      "text/comma-separated-values,text/plain",
                                                      ".csv")
                                           ),
-                                actionButton("runGV", "Validar datos"),
+                                actionButton("runGV", "Verificar datos"),
                                 p(),
-                                downloadButton("downloadGVOutput", "Descargar datos validados")
+                                downloadButton("downloadGVOutput", "Descargar"),
+                                hr(),
+                                p("Modulo creado por Ivan Gonzalez, Laura Carolina Bello,
+                                   Maria Cecilia Londono-Murcia y Jorge Velasquez-Tibata")
                                 ),
 
                conditionalPanel(condition="input.tabselected==5",
@@ -90,8 +101,8 @@ shinyUI(pageWithSidebar(
                                   Si desea conocer las distribuciones de las especies listadas,
                                   por favor consulte",
                                   a("BioModelos.", href = "http://biomodelos.humboldt.org.co/")),
-                                "Modulo creado por Elkin A. Noguera-Urbano usando",
-                                a("Shiny.", href = "http://shiny.rstudio.com")
+                                hr(),
+                                "Modulo creado por Elkin A. Noguera-Urbano"
                )
                
   ),# sidebarPanel bracket
