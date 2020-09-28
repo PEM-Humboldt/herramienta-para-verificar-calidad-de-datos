@@ -13,6 +13,7 @@ library(raster)
 
 source("db_to_dwc_simp.r") #Pass from GDB to DWC format the data
 source("herram_estruct_datos.r") # Add missing columns and trasform states, counties and coordinates to DwC Standard
+source("validacionGeografica.R")
 load('divipola_codes.rds') # Divipola Conventions from States and counties 
 shinyServer(function(input, output, session) {
   volumes <- c(Home = fs::path_home(), "R Installation" = R.home(), getVolumes()())
@@ -153,9 +154,24 @@ shinyServer(function(input, output, session) {
       sep<- switch (input$type2, "Excel (CSV)" = ",", "Texto (TSV)" = "\t", "Text (Separado por espacios)" = " ")
       
       write.csv(tbCoords(), file2, row.names = FALSE)})
+    
+    
+  #--- Fourth tab (Validacion geografica) ---#
+  observeEvent(input$runGV, {
+    output$gvOutput <- renderDataTable({
+      req(input$gvInput)
+      gvFile <- input$gvInput
+      set2 <<- read.csv(gvFile$datapath, colClasses = "character")
+      set2$scriptID <<- 1:nrow(set2)
+      set3 <- set2[, c("scriptID", "scientificName", "country", "stateProvince", "county", "decimalLatitude", "decimalLongitude")]
+      colnames(set3) <- c("scriptID", "nombre", "pais", "departamento", "municipio", "latitud", "longitud")
+      verif <- VERIFICACION_PAISES(set3, routineType = "Colombia")
+      verifTable <- verif[[1]]
+    })
+  })
 
-
-  #--- Fifth tab (BioMAD) ---#
+  
+  #--- Fifth tab (BioModelos) ---#
 
   # Crea formato para los datos de la lacalidad ingresados por el usuario.
   points <- eventReactive(input$locality, {

@@ -3,7 +3,7 @@ library(shinyFiles)
 library(leaflet)
 
 shinyUI(pageWithSidebar(
-  headerPanel("Titulo por definir"),
+  headerPanel("Herramienta para verificar calidad de datos"),
   sidebarPanel(tags$strong("Panel de opciones"),
                br(),
                br(),
@@ -61,6 +61,16 @@ shinyUI(pageWithSidebar(
                                 downloadButton("downloadData2", "Guardar como")
                                  ),
 
+               
+               conditionalPanel(condition="input.tabselected==4",
+                                fileInput("gvInput", "Seleccione el archivo CSV",
+                                          multiple = FALSE,
+                                          accept = c("text/csv",
+                                                     "text/comma-separated-values,text/plain",
+                                                     ".csv")
+                                          ),
+                                actionButton("runGV", "Validar datos")
+                                ),
 
                conditionalPanel(condition="input.tabselected==5",
                                 h1("Ingrese puntos:"),
@@ -70,9 +80,9 @@ shinyUI(pageWithSidebar(
                                 p(),
                                 downloadButton("downloadDataBioMAD", "Descargar"),
                                 p(),
-                                p("BioMAD -BioModelos Apoya Decisiones-, es una
-                                  herramienta desarrollada para generar listados preliminares
-                                  de especies a partir de la consulta de los mapas validados
+                                p("Este modulo es una herramienta desarrollada 
+                                  para generar listados preliminares de especies
+                                  a partir de la consulta de los mapas validados 
                                   disponibles en BioModelos."),
                                 p("Se sugiere usar con prudencia los listados generados.
                                   Si desea conocer las distribuciones de las especies listadas,
@@ -107,9 +117,12 @@ shinyUI(pageWithSidebar(
       tabPanel("Verificacion Taxonomica", value = 3,
                div(dataTableOutput("estrTable"), style = "font-size:80%")
       ),
-      tabPanel('Verificacion Geografica', value = 4),
+      
+      tabPanel('Verificacion Geografica', value = 4,
+               div(dataTableOutput("gvOutput"), style = "font-size:80%")
+      ),
 
-      tabPanel("BioMAD", value = 5,
+      tabPanel("BioModelos", value = 5,
                leafletOutput("mymap"),
                p(),
                fluidRow(
