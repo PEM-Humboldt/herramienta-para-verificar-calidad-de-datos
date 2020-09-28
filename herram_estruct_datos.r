@@ -47,8 +47,8 @@ trans.coord<-function(data=x, id= x$x,  lon= x$x, lat= x$x,coordreference = NA) 
     options(warn=-1)
     coords<- vector()
     coords$occurrenceID <- id
-    coords$decimalLatitude<- as.numeric(lon)
-    coords$decimalLongitude<- as.numeric(lat)
+    coords$decimalLatitude<- as.numeric(lat)
+    coords$decimalLongitude<- as.numeric(lon)
     coords<-as.data.frame(coords)
     
     no.coords <- which(is.na(coords$decimalLatitude) | is.na(coords$decimalLongitude))
