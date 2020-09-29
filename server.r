@@ -201,9 +201,9 @@ shinyServer(function(input, output, session) {
 
   #--- Fourth tab (Validacion geografica) ---#
   observeEvent(input$runGV, {
-    withProgress(message = 'Realizando verificación taxonómica',
+    output$gvOutput <- renderDataTable({
+      withProgress(message = 'Realizando verificación taxonómica',
                 detail = 'Espere un momento...', value = 0.6, {
-      output$gvOutput <- renderDataTable({
         req(input$gvInput)
         gvFile <- input$gvInput
         set2 <<- as.data.frame(fread(gvFile$datapath, colClasses = "character", header = TRUE, encoding = "Latin-1"))
