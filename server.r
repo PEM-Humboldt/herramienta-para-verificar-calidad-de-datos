@@ -14,11 +14,12 @@ library(raster)
 source("db_to_dwc_simp.r") #Pass from GDB to DWC format the data
 source("herram_estruct_datos.r") # Add missing columns and trasform states, counties and coordinates to DwC Standard
 source("validacionGeografica.R")
-load('divipola_codes.rds') # Divipola Conventions from States and counties 
+source("taxon_valid.R", local = TRUE)
+load('divipola_codes.rds') # Divipola Conventions from States and counties
 shinyServer(function(input, output, session) {
   volumes <- c(Home = fs::path_home(), "R Installation" = R.home(), getVolumes()())
   shinyDirChoose(input, "directory", roots = volumes, session = session, restrictions = system.file(package = "base"), filetypes=c('', 'gdb'))
-  
+
   dsimput<- reactive({
     req(input$directory)
     if (is.integer(input$directory)) {
@@ -29,7 +30,7 @@ shinyServer(function(input, output, session) {
     }
   })
   #--- First tab ---#
-  ## Table 
+  ## Table
   output$initTable <- renderDataTable({
     a<-dsimput()
     datatable(a,
@@ -37,10 +38,8 @@ shinyServer(function(input, output, session) {
                 pageLength = 3,
                 lengthMenu = c(2, 12, 18),
                 searching= FALSE))
-    
-    
   })
-  
+
   #--- Second tab ---#
   # Transform political administrative names and add missing data
   tbTranform <- eventReactive(input$tranformBtn, {
@@ -57,7 +56,7 @@ shinyServer(function(input, output, session) {
       }
     }
  })
-  
+
   # Pulling the list of variable for choice of variable x
   output$vary <- renderUI({
     selectInput("variabley", "seleccione la latitud", choices=names(tbTranform()))
@@ -66,7 +65,6 @@ shinyServer(function(input, output, session) {
   output$varx <- renderUI({
     selectInput("variablex", "Seleccione la longitud", choices=names(tbTranform()))
   })
-  
 
   # convert coords from planar to geographical standard
   tbCoords <- eventReactive(input$coordBtn, {
@@ -76,36 +74,36 @@ shinyServer(function(input, output, session) {
     if (!is.numeric(input$variablex)) {
       print("debe seleccionar una columna correcta")
     }
-    
+
         if (selectcoords == 1){
-      datacoords<- trans.coord(data= coordsajust, 
+      datacoords<- trans.coord(data= coordsajust,
                                  id = coordsajust$occurrenceID,
-                                 lon =coordsajust$verbatimLongitude, 
-                                 lat =coordsajust$verbatimLatitude, 
+                                 lon =coordsajust$verbatimLongitude,
+                                 lat =coordsajust$verbatimLatitude,
                                  coordreference = "magnafarwest")
     } else if (selectcoords == 2) {
-      datacoords<- trans.coord(data= coordsajust, 
+      datacoords<- trans.coord(data= coordsajust,
                                  id = coordsajust$occurrenceID,
-                                lon =coordsajust$verbatimLongitude, 
-                                lat =coordsajust$verbatimLatitude,  
+                                lon =coordsajust$verbatimLongitude,
+                                lat =coordsajust$verbatimLatitude,
                                  coordreference = "magnawest")
     } else if (selectcoords == 3) {
-      datacoords<- trans.coord(data= coordsajust, 
+      datacoords<- trans.coord(data= coordsajust,
                                  id = coordsajust$occurrenceID,
-                               lon =coordsajust$verbatimLongitude, 
-                               lat =coordsajust$verbatimLatitude, 
+                               lon =coordsajust$verbatimLongitude,
+                               lat =coordsajust$verbatimLatitude,
                                  coordreference = "magnabta")
     } else if (selectcoords == 4) {
-      datacoords<- trans.coord(data= coordsajust, 
+      datacoords<- trans.coord(data= coordsajust,
                                  id = coordsajust$occurrenceID,
-                                lon =coordsajust$verbatimLongitude, 
-                                lat =coordsajust$verbatimLatitude,   
+                                lon =coordsajust$verbatimLongitude,
+                                lat =coordsajust$verbatimLatitude,
                                  coordreference = "magnaeast")
     } else if (selectcoords == 5) {
-      datacoords<- trans.coord(data= coordsajust, 
+      datacoords<- trans.coord(data= coordsajust,
                                  id = coordsajust$occurrenceID,
-                                 lon =coordsajust$verbatimLongitude, 
-                                 lat =coordsajust$verbatimLatitude, 
+                                 lon =coordsajust$verbatimLongitude,
+                                 lat =coordsajust$verbatimLatitude,
                                  coordreference = "magnafareast")
     }
  })
@@ -128,10 +126,10 @@ shinyServer(function(input, output, session) {
   fileext<- reactive({
     switch (input$type,
             "Excel (CSV)" = "csv", "Texto (TSV)" = "txt", "Text (Separado por espacios)" = "txt")
-  }) 
+  })
     fileext2<- reactive({
       switch (input$type2,
-              "Excel (CSV)" = "csv", "Texto (TSV)" = "txt", "Text (Separado por espacios)" = "txt") 
+              "Excel (CSV)" = "csv", "Texto (TSV)" = "txt", "Text (Separado por espacios)" = "txt")
     })
 # Download data in the first tab ----
   output$downloadData <- downloadHandler(
@@ -140,11 +138,11 @@ shinyServer(function(input, output, session) {
     },
     content = function(file) {
       sep<- switch (input$type, "Excel (CSV)" = ",", "Texto (TSV)" = "\t", "Text (Separado por espacios)" = " ")
-      
+
       write.csv(dsimput(), file, row.names = FALSE)})
-  
-  
-  
+
+
+
   # Download data in the second tab ----
   output$downloadData2 <- downloadHandler(
     filename = function() {
@@ -152,10 +150,48 @@ shinyServer(function(input, output, session) {
     },
     content = function(file2) {
       sep<- switch (input$type2, "Excel (CSV)" = ",", "Texto (TSV)" = "\t", "Text (Separado por espacios)" = " ")
-      
+
       write.csv(tbCoords(), file2, row.names = FALSE)})
-    
-    
+
+  #--- Third tab (Validacion taxonómica) ---#
+  showOuput <- reactiveValues(table = NULL)
+
+  observeEvent(input$verCsv, {
+    inFile <- input$verCsv
+
+    if (is.null(inFile))
+      return(NULL)
+
+    dataList <<- read.csv(inFile$datapath)
+    showOuput$table <- dataList
+  })
+
+  observeEvent(input$taxValBtn, {
+    withProgress(message = 'Name Validation',
+                detail = 'This may take a while...', value = 0, {
+      validList <<- tax_res(dataList$scientificName)
+      showOuput$table <- validList
+    })
+  })
+
+  observeEvent(input$mergeBtn, {
+    showOuput$table <- merge(dataList, validList, by.x= "scientificName", by.y="submitted_name", all.y = TRUE)
+  })
+
+  output$estrTable <- renderTable({
+    if (is.null(showOuput$table)) return()
+    showOuput$table
+  })
+
+  output$downloadData3 <- downloadHandler(
+    filename = function() {
+      paste("tax_validated", "csv", sep = ".")
+    },
+    content = function(file) {
+      write.csv(showOuput$table, file, row.names = FALSE)
+    }
+  )
+
   #--- Fourth tab (Validacion geografica) ---#
   observeEvent(input$runGV, {
     output$gvOutput <- renderDataTable({
@@ -169,12 +205,12 @@ shinyServer(function(input, output, session) {
       verifTable <<- verif[[1]]
     })
   })
-  
+
   output$downloadGVOutput <- downloadHandler(filename = "resultado_validacion_geografica.csv",
                                              content = function(file){
                                                write.csv(verifTable, file, row.names = FALSE)
                                              })
-  
+
   #--- Fifth tab (BioModelos) ---#
 
   # Crea formato para los datos de la lacalidad ingresados por el usuario.
