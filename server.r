@@ -32,8 +32,8 @@ shinyServer(function(input, output, session) {
   #--- First tab ---#
   ## Table
   output$initTable <- renderDataTable({
-    withProgress(message = "", 
-                 detail = 'Transfiendo datos de la GDB a una tabla, espere un momento...', value = 0, {
+    withProgress(message = 'Transfiendo datos de la GDB a una tabla',
+                 detail = 'Espere un momento...', value = 0, {
       a<-dsimput()
       datatable(a,
                 options = list(
@@ -46,8 +46,8 @@ shinyServer(function(input, output, session) {
   #--- Second tab ---#
   # Transform political administrative names and add missing data
   tbTranform <- eventReactive(input$tranformBtn, {
-    withProgress(message = "", 
-                 detail = 'Convirtiendo informacion, espere un momento...', value = 0, {
+    withProgress(message = 'Convirtiendo informacion',
+                 detail = 'Espere un momento...', value = 0.1, {
       estr_dt<-dsimput()
       if (input$dividata == 1) {
         datapol<- corr.geonames(data =estr_dt, depto = estr_dt$stateProvince,  mpio =  estr_dt$county )
@@ -59,7 +59,7 @@ shinyServer(function(input, output, session) {
           adddata<- add.corr.dt(data = estr_dt)
         }
       }
-    }) 
+    })
   })
 
   # Pulling the list of variable for choice of variable x
@@ -73,11 +73,11 @@ shinyServer(function(input, output, session) {
 
   # convert coords from planar to geographical standard
   tbCoords <- eventReactive(input$coordBtn, {
-    withProgress(message = "", 
-                 detail = 'Transformando coordenadas, espere un momento...', value = 0, {
+    withProgress(message = 'Transformando coordenadas',
+                 detail = 'Espere un momento...', value = 0.2, {
       coordsajust<-tbTranform()
       selectcoords<- input$coordSrc
-  
+
       if (!is.numeric(input$variablex)) {
         print("debe seleccionar una columna correcta")
       }
@@ -169,13 +169,13 @@ shinyServer(function(input, output, session) {
     if (is.null(inFile))
       return(NULL)
 
-    dataList <<- read.csv(inFile$datapath)
+    dataList <<- as.data.frame(fread(inFile$datapath))
     showOuput$table <- dataList
   })
 
   observeEvent(input$taxValBtn, {
-    withProgress(message = 'Name Validation',
-                detail = 'This may take a while...', value = 0, {
+    withProgress(message = 'Realizando verificación taxonómica',
+                detail = 'Espere un momento...', value = 0.4, {
       validList <<- tax_res(dataList$scientificName)
       showOuput$table <- validList
     })
@@ -201,15 +201,18 @@ shinyServer(function(input, output, session) {
 
   #--- Fourth tab (Validacion geografica) ---#
   observeEvent(input$runGV, {
-    output$gvOutput <- renderDataTable({
-      req(input$gvInput)
-      gvFile <- input$gvInput
-      set2 <<- as.data.frame(fread(gvFile$datapath, colClasses = "character", header = TRUE, encoding = "Latin-1"))
-      set2$scriptID <<- 1:nrow(set2)
-      set3 <- set2[, c("scriptID", "scientificName", "country", "stateProvince", "county", "decimalLatitude", "decimalLongitude")]
-      colnames(set3) <- c("scriptID", "nombre", "pais", "departamento", "municipio", "latitud", "longitud")
-      verif <- VERIFICACION_PAISES(set3, routineType = "Colombia")
-      verifTable <<- verif[[1]]
+    withProgress(message = 'Realizando verificación taxonómica',
+                detail = 'Espere un momento...', value = 0.6, {
+      output$gvOutput <- renderDataTable({
+        req(input$gvInput)
+        gvFile <- input$gvInput
+        set2 <<- as.data.frame(fread(gvFile$datapath, colClasses = "character", header = TRUE, encoding = "Latin-1"))
+        set2$scriptID <<- 1:nrow(set2)
+        set3 <- set2[, c("scriptID", "scientificName", "country", "stateProvince", "county", "decimalLatitude", "decimalLongitude")]
+        colnames(set3) <- c("scriptID", "nombre", "pais", "departamento", "municipio", "latitud", "longitud")
+        verif <- VERIFICACION_PAISES(set3, routineType = "Colombia")
+        verifTable <<- verif[[1]]
+      })
     })
   })
 
