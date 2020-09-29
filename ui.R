@@ -155,7 +155,7 @@ shinyUI(pageWithSidebar(
       tabPanel("Verificacion Taxonomica", value = 3,
                tags$br(),
                 tags$em(HTML("En esta seccion podra verificar la coincidencia entre los nombres cientificos que provienen de la gdb u otra fuente, con validadores taxonomicos disponibles en la web, y los mezcla con la tabla de entrada")),
-               div(tableOutput("estrTable"), style = "font-size:80%")
+               div(DT::dataTableOutput("estrTable"), style = "font-size:80%")
       ),
 
       tabPanel('Verificacion Geografica', value = 4,

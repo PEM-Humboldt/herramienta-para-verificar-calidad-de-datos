@@ -32,30 +32,35 @@ shinyServer(function(input, output, session) {
   #--- First tab ---#
   ## Table
   output$initTable <- renderDataTable({
-    a<-dsimput()
-    datatable(a,
-              options = list(
-                pageLength = 3,
-                lengthMenu = c(2, 12, 18),
-                searching= FALSE))
+    withProgress(message = "", 
+                 detail = 'Transfiendo datos de la GDB a una tabla, espere un momento...', value = 0, {
+      a<-dsimput()
+      datatable(a,
+                options = list(
+                  pageLength = 3,
+                  lengthMenu = c(2, 12, 18),
+                  searching= FALSE))
+    })
   })
 
   #--- Second tab ---#
   # Transform political administrative names and add missing data
   tbTranform <- eventReactive(input$tranformBtn, {
-    estr_dt<-dsimput()
-
-    if (input$dividata == 1) {
-      datapol<- corr.geonames(data =estr_dt, depto = estr_dt$stateProvince,  mpio =  estr_dt$county )
-      if (input$dataajust == 1) {
-        validate(need(datapol, ""))
-        adddata<- add.corr.dt(data = datapol)}
-    } else if (input$dividata == 2) {
-      if (input$dataajust == 1) {
-        adddata<- add.corr.dt(data = estr_dt)
+    withProgress(message = "", 
+                 detail = 'Convirtiendo informacion, espere un momento...', value = 0, {
+      estr_dt<-dsimput()
+      if (input$dividata == 1) {
+        datapol<- corr.geonames(data =estr_dt, depto = estr_dt$stateProvince,  mpio =  estr_dt$county )
+        if (input$dataajust == 1) {
+          validate(need(datapol, ""))
+          adddata<- add.corr.dt(data = datapol)}
+      } else if (input$dividata == 2) {
+        if (input$dataajust == 1) {
+          adddata<- add.corr.dt(data = estr_dt)
+        }
       }
-    }
- })
+    }) 
+  })
 
   # Pulling the list of variable for choice of variable x
   output$vary <- renderUI({
@@ -68,45 +73,47 @@ shinyServer(function(input, output, session) {
 
   # convert coords from planar to geographical standard
   tbCoords <- eventReactive(input$coordBtn, {
-    coordsajust<-tbTranform()
-    selectcoords<- input$coordSrc
-
-    if (!is.numeric(input$variablex)) {
-      print("debe seleccionar una columna correcta")
-    }
-
-        if (selectcoords == 1){
-      datacoords<- trans.coord(data= coordsajust,
-                                 id = coordsajust$occurrenceID,
+    withProgress(message = "", 
+                 detail = 'Transformando coordenadas, espere un momento...', value = 0, {
+      coordsajust<-tbTranform()
+      selectcoords<- input$coordSrc
+  
+      if (!is.numeric(input$variablex)) {
+        print("debe seleccionar una columna correcta")
+      }
+      if (selectcoords == 1){
+        datacoords<- trans.coord(data= coordsajust,
+                                   id = coordsajust$occurrenceID,
+                                   lon =coordsajust$verbatimLongitude,
+                                   lat =coordsajust$verbatimLatitude,
+                                   coordreference = "magnafarwest")
+      } else if (selectcoords == 2) {
+        datacoords<- trans.coord(data= coordsajust,
+                                   id = coordsajust$occurrenceID,
+                                  lon =coordsajust$verbatimLongitude,
+                                  lat =coordsajust$verbatimLatitude,
+                                   coordreference = "magnawest")
+      } else if (selectcoords == 3) {
+        datacoords<- trans.coord(data= coordsajust,
+                                   id = coordsajust$occurrenceID,
                                  lon =coordsajust$verbatimLongitude,
                                  lat =coordsajust$verbatimLatitude,
-                                 coordreference = "magnafarwest")
-    } else if (selectcoords == 2) {
-      datacoords<- trans.coord(data= coordsajust,
-                                 id = coordsajust$occurrenceID,
-                                lon =coordsajust$verbatimLongitude,
-                                lat =coordsajust$verbatimLatitude,
-                                 coordreference = "magnawest")
-    } else if (selectcoords == 3) {
-      datacoords<- trans.coord(data= coordsajust,
-                                 id = coordsajust$occurrenceID,
-                               lon =coordsajust$verbatimLongitude,
-                               lat =coordsajust$verbatimLatitude,
-                                 coordreference = "magnabta")
-    } else if (selectcoords == 4) {
-      datacoords<- trans.coord(data= coordsajust,
-                                 id = coordsajust$occurrenceID,
-                                lon =coordsajust$verbatimLongitude,
-                                lat =coordsajust$verbatimLatitude,
-                                 coordreference = "magnaeast")
-    } else if (selectcoords == 5) {
-      datacoords<- trans.coord(data= coordsajust,
-                                 id = coordsajust$occurrenceID,
-                                 lon =coordsajust$verbatimLongitude,
-                                 lat =coordsajust$verbatimLatitude,
-                                 coordreference = "magnafareast")
-    }
- })
+                                   coordreference = "magnabta")
+      } else if (selectcoords == 4) {
+        datacoords<- trans.coord(data= coordsajust,
+                                   id = coordsajust$occurrenceID,
+                                  lon =coordsajust$verbatimLongitude,
+                                  lat =coordsajust$verbatimLatitude,
+                                   coordreference = "magnaeast")
+      } else if (selectcoords == 5) {
+        datacoords<- trans.coord(data= coordsajust,
+                                   id = coordsajust$occurrenceID,
+                                   lon =coordsajust$verbatimLongitude,
+                                   lat =coordsajust$verbatimLatitude,
+                                   coordreference = "magnafareast")
+      }
+    })
+  })
 
   #visualizate  ajusted data
   output$tbTranform <- renderDataTable({
@@ -178,7 +185,7 @@ shinyServer(function(input, output, session) {
     showOuput$table <- merge(dataList, validList, by.x= "scientificName", by.y="submitted_name", all.y = TRUE)
   })
 
-  output$estrTable <- renderTable({
+  output$estrTable <- DT::renderDataTable({
     if (is.null(showOuput$table)) return()
     showOuput$table
   })
