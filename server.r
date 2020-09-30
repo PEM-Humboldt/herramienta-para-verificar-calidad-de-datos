@@ -202,14 +202,16 @@ shinyServer(function(input, output, session) {
   #--- Fourth tab (Validacion geografica) ---#
   observeEvent(input$runGV, {
     output$gvOutput <- renderDataTable({
-      withProgress(message = 'Realizando verificación taxonómica',
-                detail = 'Espere un momento...', value = 0.6, {
+      withProgress(message = 'Realizando verificación taxonómica', 
+                   min = 0, max = 1, {
         req(input$gvInput)
+        incProgress(0.1, detail = "Preparando datos...")
         gvFile <- input$gvInput
         set2 <<- as.data.frame(fread(gvFile$datapath, colClasses = "character", header = TRUE, encoding = "Latin-1"))
         set2$scriptID <<- 1:nrow(set2)
         set3 <- set2[, c("scriptID", "scientificName", "country", "stateProvince", "county", "decimalLatitude", "decimalLongitude")]
         colnames(set3) <- c("scriptID", "nombre", "pais", "departamento", "municipio", "latitud", "longitud")
+        incProgress(0.4, detail = "Verificando datos...")
         verif <- VERIFICACION_PAISES(set3, routineType = "Colombia")
         verifTable <<- verif[[1]]
       })
