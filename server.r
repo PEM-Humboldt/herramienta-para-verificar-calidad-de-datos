@@ -213,7 +213,8 @@ shinyServer(function(input, output, session) {
         colnames(set3) <- c("scriptID", "nombre", "pais", "departamento", "municipio", "latitud", "longitud")
         incProgress(0.4, detail = "Verificando datos...")
         verif <- VERIFICACION_PAISES(set3, routineType = "Colombia")
-        verifTable <<- verif[[1]]
+        verifSimple <- verif[[1]]
+        verifTable <<- verifSimple[, !(names(verifSimple) %in% c("suggestedMunicipality", "duplicated"))]
       })
     })
   })
