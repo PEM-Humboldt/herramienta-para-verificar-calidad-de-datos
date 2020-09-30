@@ -3,6 +3,7 @@ Herramienta para la verificación geográfica y taxonómica de registros biológ
 
 V0.1.0
 
+
 ## Por dónde empezar
 
 A continuación se presentan instrucciones para ejecutar la aplicación en su máquina local.
@@ -26,8 +27,6 @@ git clone https://github.com/PEM-Humboldt/herramienta-para-verificar-calidad-de-
 De lo contrario, descargue la carpeta comprimida desde el botón *Code* y extraiga su contenido en algún lugar de su máquina.
 
 Esta aplicación necesita diferentes paquetes de R para su ejecución. El script `install.R` se encarga de instalar todos los paquetes de manera automática. Con el fin de evitar conflictos entre paquetes de R ya existentes en su máquina, la instalación se hace en una librería privada e independiente que es utilizada únicamente por esta aplicación. Por su parte, el script `runApp.R` es el encargado de abrir la aplicación en el navegador por defecto del sistema. Si ya está familiarizado con la ejecución de scripts de R, ejecute solo una vez el script `install.R` y después de haber reiniciado la sesión de R, ejecute el script `runApp.R`. De aquí en adelante solo es necesario ejecutar el script `runApp.R` cada vez que quiera abrir la aplicación. Si no está familiarizado con la ejecución de scripts de R, a continuación se presentan tres maneras distintas de hacerlo:
-
-<br>
 
 #### **R desde una consola**
 Abra una terminal o consola (*i.e.* CMD en Windows) y navegue hasta el la carpeta con los contenidos de la aplicación utilizando el comando `cd`. Por ejemplo:
@@ -54,8 +53,6 @@ La aplicación abrirá en el navegador por defecto del sistema. En caso de que s
 C:\Program Files\R\R-4.0.2\bin\R.exe --no-save < runApp.R
 ```
 
-<br>
-
 #### **Rscript desde una consola**
 Abra una terminal o consola (*i.e.* CMD en Windows) y navegue hasta el la carpeta con los contenidos de la aplicación utilizando el comando `cd`. Por ejemplo:
 
@@ -81,8 +78,6 @@ La aplicación abrirá en el navegador por defecto del sistema. En caso de que s
 C:\Program Files\R\R-4.0.2\bin\Rscript.exe runApp.R
 ```
 
-<br>
-
 #### **RStudio**
 Para instalar los paquetes desde RStudio siga estos pasos una sola vez:
 
@@ -94,8 +89,6 @@ Para ejecutar la aplicación desde RStudio siga estos pasos:
 
 1. Abra RStudio y haga click en File -> Open Project... Navegue hasta la carpeta donde esta el contenido de la aplicación y haga click en Open.
 2. Una vez se haya creado el proyecto y RStudio haya terminado de cargar, abra el archivo runApp.R. Este se puede abrir desde el panel de archivos (ubicado por defecto en la parte inferior derecha de RStudio). Haga click en Run App y el navegador por defecto de su sistema abrirá una pestaña nueva con la aplicación.
-
-<br>
 
 
 ## Estructura de archivos
@@ -114,7 +107,6 @@ Para ejecutar la aplicación desde RStudio siga estos pasos:
 | validacionGeografica.R | Función para validar que las coordenadas asociadas a cada registro se encuentren realmente dentro de los municipios y departamentos reportados. |
 | taxon_Valid.r          | Función para validar listas de nombres científicos a partir de la función `gnr_resolve` del paquete `taxize`.                                   |
 
-<br>
 
 ## Autores
 
