@@ -29,7 +29,7 @@ De lo contrario, descargue la carpeta comprimida desde el botón *Code* y extrai
 Esta aplicación necesita diferentes paquetes de R para su ejecución. El script `install.R` se encarga de instalar todos los paquetes de manera automática. Con el fin de evitar conflictos entre paquetes de R ya existentes en su máquina, la instalación se hace en una librería privada e independiente que es utilizada únicamente por esta aplicación. Por su parte, el script `runApp.R` es el encargado de abrir la aplicación en el navegador por defecto del sistema. Si ya está familiarizado con la ejecución de scripts de R, ejecute solo una vez el script `install.R` y después de haber reiniciado la sesión de R, ejecute el script `runApp.R`. De aquí en adelante solo es necesario ejecutar el script `runApp.R` cada vez que quiera abrir la aplicación. Si no está familiarizado con la ejecución de scripts de R, a continuación se presentan tres maneras distintas de hacerlo:
 
 #### **R desde una consola**
-Abra una terminal o consola (*i.e.* CMD en Windows) y navegue hasta el la carpeta con los contenidos de la aplicación utilizando el comando `cd`. Por ejemplo:
+Abra una terminal o consola (*i.e.* CMD en Windows) y navegue hasta la carpeta con los contenidos de la aplicación utilizando el comando `cd`. Por ejemplo:
 
 ```
 cd C:\Users\Foo\Documents\herramienta-para-verificar-calidad-de-datos
@@ -54,7 +54,7 @@ C:\Program Files\R\R-4.0.2\bin\R.exe --no-save < runApp.R
 ```
 
 #### **Rscript desde una consola**
-Abra una terminal o consola (*i.e.* CMD en Windows) y navegue hasta el la carpeta con los contenidos de la aplicación utilizando el comando `cd`. Por ejemplo:
+Abra una terminal o consola (*i.e.* CMD en Windows) y navegue hasta la carpeta con los contenidos de la aplicación utilizando el comando `cd`. Por ejemplo:
 
 ```
 cd C:\Users\Foo\Documents\herramienta-para-verificar-calidad-de-datos
@@ -81,14 +81,14 @@ C:\Program Files\R\R-4.0.2\bin\Rscript.exe runApp.R
 #### **RStudio**
 Para instalar los paquetes desde RStudio siga estos pasos una sola vez:
 
-1. Haga click en File -> New Project...-> Existing Directory -> Browse. Navegue hasta la carpeta donde esta el contenido de la aplicación (e.g. `C:\Users\Foo\Documents\herramienta-para-verificar-calidad-de-datos`), seleccionela y haga click en Create Project.
+1. Haga click en File -> New Project...-> Existing Directory -> Browse. Navegue hasta la carpeta donde está el contenido de la aplicación (e.g. `C:\Users\Foo\Documents\herramienta-para-verificar-calidad-de-datos`), selecciónela y haga click en Create Project.
 2. Una vez se haya creado el proyecto y RStudio haya terminado de cargar, abra el archivo install.R. Este se puede abrir desde el panel de archivos (ubicado por defecto en la parte inferior derecha de RStudio). Haga click en Source para comenzar la instalación.
 3. Una vez finalizada la instalación, cierre RStudio o reinicie la sesión de R (Crtl + Shift + F10) para reiniciar la sesión de R.
 
 Para ejecutar la aplicación desde RStudio siga estos pasos:
 
-1. Abra RStudio y haga click en File -> Open Project... Navegue hasta la carpeta donde esta el contenido de la aplicación y haga click en Open.
-2. Una vez se haya creado el proyecto y RStudio haya terminado de cargar, abra el archivo runApp.R. Este se puede abrir desde el panel de archivos (ubicado por defecto en la parte inferior derecha de RStudio). Haga click en Run App y el navegador por defecto de su sistema abrirá una pestaña nueva con la aplicación.
+1. Abra RStudio y haga click en File -> Open Project... Navegue hasta la carpeta donde está el contenido de la aplicación y haga click en Open.
+2. Una vez RStudio haya terminado de cargar, abra el archivo runApp.R. Este se puede abrir desde el panel de archivos (ubicado por defecto en la parte inferior derecha de RStudio). Haga click en Run App y el navegador por defecto de su sistema abrirá una pestaña nueva con la aplicación.
 
 
 ## Estructura de archivos
