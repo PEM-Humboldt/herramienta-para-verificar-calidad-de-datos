@@ -142,7 +142,7 @@ shinyUI(pageWithSidebar(
                tags$br(),
                tags$br(),
                tags$p(HTML("Cite este recurso de la siguiente forma:")),
-               tags$blockquote("Bello C., Castro C., Cruz-Rodriguez C., Gonzalez I, Londono M. C., Lopez D., Noguera-Urbano E. A., Olaya-Rodriguez M. H., Rey J. C., Suarez E., Velasquez-Tibata J., Villa M. 2020. Herramienta para verificar la calidad de datos sobre biodiversidad. Instituto de Investigacion de Recussos Biologicos, Alexander von Humboldt. Esta aplicacion fue creada en el marco de la suborden de tarea 4 en el marco del Proyecto Riqueza Natural de USAID.", style = "font-size:90%"),
+               tags$blockquote("Bello C., Castro C., Cruz-Rodriguez C., Gonzalez I, Londono M. C., Lopez D., Noguera-Urbano E. A., Olaya-Rodriguez M. H., Rey J. C., Suarez E., Velasquez-Tibata J., Villa M. 2020. Herramienta para verificar la calidad de datos sobre biodiversidad. Instituto de Investigacion de Recursos Biologicos, Alexander von Humboldt. Esta aplicacion fue creada en el marco de la suborden de tarea 4 en el marco del Proyecto Riqueza Natural de USAID.", style = "font-size:90%"),
                
                div(dataTableOutput("initTable"), style = "font-size:80%")),
 
