@@ -110,6 +110,18 @@ shinyUI(pageWithSidebar(
                                   a partir de la consulta de los mapas validados
                                   disponibles en BioModelos."),
                                  hr(),
+                                 helpText("(Opcional)"),
+                                 helpText("Seleccione la tabla con registros estructurados
+                                          para conocer cuales especies presentes en los
+                                          registros coinciden con el listado de especies
+                                          de BioModelos en el punto de consulta."),
+                                 fileInput("bmInput", "Seleccione el archivo CSV",
+                                           multiple = FALSE,
+                                           accept = c("text/csv",
+                                                      "text/comma-separated-values,text/plain",
+                                                      ".csv")
+                                 ),
+                                 hr(),
                                  p("Seleccione las coordenadas del punto del cual desea conocer las especies potenciales"),
                                 numericInput("long", label = ("Longitud:"), value = -73.839222),
                                 numericInput("lat", label = ("Latitud:"), value = 4.721806),

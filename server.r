@@ -263,7 +263,13 @@ shinyServer(function(input, output, session) {
     temp <- SpatialPointsDataFrame(temp,temp)
     crs(temp) <- "+proj=longlat +datum=WGS84 +no_defs"
     maps<-readOGR("./appData/Biom_UICN.shp") # Cargar archivo shapefile BioModelos.
-    as.data.frame(over(temp,maps,returnList = TRUE))
+    species <- as.data.frame(over(temp,maps,returnList = TRUE))
+    if (!is.null(input$bmInput)) {
+      bmFile <- input$bmInput
+      records <<- as.data.frame(fread(bmFile$datapath, colClasses = "character", header = TRUE, encoding = "Latin-1"))
+      species$Coincidencia <- species$X1.binomial %in% records$scientificName
+    }
+    return(species)
     })
 
   # Muestra la tabla en el panel principal.
