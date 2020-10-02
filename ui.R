@@ -1,6 +1,9 @@
 library(shiny)
 library(shinyFiles)
 library(leaflet)
+library(DT)
+
+tags$head(tags$link(rel = "shortcut icon", href = "favicon.ico"))
 
 shinyUI(pageWithSidebar(
   headerPanel("Herramienta para verificar la calidad de datos"),
@@ -156,12 +159,12 @@ shinyUI(pageWithSidebar(
                tags$p(HTML("Cite este recurso de la siguiente forma:")),
                tags$blockquote("Bello C., Castro C., Cruz-Rodriguez C., Gonzalez I, Londono M. C., Lopez D., Noguera-Urbano E. A., Olaya-Rodriguez M. H., Rey J. C., Suarez E., Velasquez-Tibata J., Villa M. 2020. Herramienta para verificar la calidad de datos sobre biodiversidad. Instituto de Investigacion de Recursos Biologicos, Alexander von Humboldt. Esta aplicacion fue creada en el marco de la suborden de tarea 4 en el marco del Proyecto Riqueza Natural de USAID.", style = "font-size:90%"),
                
-               div(dataTableOutput("initTable"), style = "font-size:80%")),
+               div(DT::dataTableOutput("initTable"), style = "font-size:80%")),
 
       tabPanel("Estructuracion de los datos", value=2,
                tags$br(),
                tags$em(HTML("Para continuar con el proceso de verificacion usando la informacion extraida de las GDB, seleccione 'si' y 'agregar' en el panel de opciones")),
-               div(dataTableOutput("tbTranform"), style = "font-size:80%")
+               div(DT::dataTableOutput("tbTranform"), style = "font-size:80%")
       ),
 
       tabPanel("Verificacion Taxonomica", value = 3,
@@ -180,7 +183,7 @@ shinyUI(pageWithSidebar(
                             ejecutar la verificacion asegurese de subir una tabla
                             con los datos estructurados en formato csv y haga click
                             en el boton de Verificar datos.")),
-               div(dataTableOutput("gvOutput"), style = "font-size:80%")
+               div(DT::dataTableOutput("gvOutput"), style = "font-size:80%")
       ),
 
       tabPanel("BioModelos", value = 5,
