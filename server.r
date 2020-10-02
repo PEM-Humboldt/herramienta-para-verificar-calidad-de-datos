@@ -182,7 +182,7 @@ shinyServer(function(input, output, session) {
   })
 
   observeEvent(input$mergeBtn, {
-    showOuput$table <- merge(dataList, validList, by.x= "scientificName", by.y="submitted_name", all.y = TRUE)
+    showOuput$table <- merge(dataList, validList, by.x= "scientificName", by.y="submitted_name", all.x = T)
   })
 
   output$estrTable <- DT::renderDataTable({
