@@ -111,6 +111,12 @@ shinyServer(function(input, output, session) {
                                    lon =coordsajust$verbatimLongitude,
                                    lat =coordsajust$verbatimLatitude,
                                    coordreference = "magnafareast")
+      } else if (selectcoords == 6) {
+        datacoords<- trans.coord(data= coordsajust,
+                                 id = coordsajust$occurrenceID,
+                                 lon =coordsajust$verbatimLongitude,
+                                 lat =coordsajust$verbatimLatitude,
+                                 coordreference = "magnacolombia")
       }
     })
   })

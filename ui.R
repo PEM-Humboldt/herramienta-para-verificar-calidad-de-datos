@@ -55,7 +55,7 @@ shinyUI(pageWithSidebar(
                                 tags$strong("Origen de los datos"),
                                 tags$p(" Seleccione un sistema de referencia"),
                                 selectInput(inputId = "coordSrc",label = "",
-                                            choices = c("Oeste - Oeste"= 1, "Oeste"= 2, "Bogota"= 3, "Este"= 4, "Este - Este" =5),
+                                            choices = c("Oeste - Oeste (ESPG 3114)"= 1, "Oeste (ESPG 3115)"= 2, "Bogota (ESPG 3116)"= 3, "Este (ESPG 3117)"= 4, "Este - Este (ESPG 3118)" =5, "Nacional (EPSG: 9377)" = 6),
                                             selected = NULL),
                                 actionButton("coordBtn", "Transformar"),
 
