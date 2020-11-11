@@ -79,7 +79,7 @@ shinyUI(pageWithSidebar(
                                 radioButtons(
                                   'sep',
                                   'Separador',
-                                  c(Coma=',', PuntoyComa=';', Tabulacion='\t'),
+                                  c(Coma=',', "Punto y coma"=';', Tabulacion='\t'),
                                   ','
                                 ),
                                 actionButton("taxValBtn", "Validar Nombres"),
