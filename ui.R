@@ -71,14 +71,15 @@ shinyUI(pageWithSidebar(
                                  fileInput('verCsv', "Seleccione el archivo 'csv'",
                                   accept=c('text/csv',
                                   'text/comma-separated-values,text/plain',
-                                  '.csv')
+                                  '.csv'),
+                                  buttonLabel = "Buscar..."
                                 ),
                                 tags$hr(),
                                 checkboxInput('header', 'Encabezado', TRUE),
                                 radioButtons(
                                   'sep',
-                                  'Separator',
-                                  c(Comma=',', Semicolon=';', Tab='\t'),
+                                  'Separador',
+                                  c(Coma=',', PuntoyComa=';', Tabulacion='\t'),
                                   ','
                                 ),
                                 actionButton("taxValBtn", "Validar Nombres"),
@@ -98,7 +99,8 @@ shinyUI(pageWithSidebar(
                                           multiple = FALSE,
                                           accept = c("text/csv",
                                                      "text/comma-separated-values,text/plain",
-                                                     ".csv")
+                                                     ".csv"),
+                                          buttonLabel = "Buscar..."
                                           ),
                                 actionButton("runGV", "Verificar datos"),
                                 p(),
@@ -122,7 +124,8 @@ shinyUI(pageWithSidebar(
                                            multiple = FALSE,
                                            accept = c("text/csv",
                                                       "text/comma-separated-values,text/plain",
-                                                      ".csv")
+                                                      ".csv"),
+                                          buttonLabel = "Buscar..."
                                  ),
                                  hr(),
                                  p("Seleccione las coordenadas del punto del cual desea conocer las especies potenciales"),
