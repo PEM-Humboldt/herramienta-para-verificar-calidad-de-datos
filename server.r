@@ -81,43 +81,14 @@ shinyServer(function(input, output, session) {
       if (!is.numeric(input$variablex)) {
         print("debe seleccionar una columna correcta")
       }
-      if (selectcoords == 1){
-        datacoords<- trans.coord(data= coordsajust,
-                                   id = coordsajust$occurrenceID,
-                                   lon =coordsajust$verbatimLongitude,
-                                   lat =coordsajust$verbatimLatitude,
-                                   coordreference = "magnafarwest")
-      } else if (selectcoords == 2) {
-        datacoords<- trans.coord(data= coordsajust,
-                                   id = coordsajust$occurrenceID,
-                                  lon =coordsajust$verbatimLongitude,
-                                  lat =coordsajust$verbatimLatitude,
-                                   coordreference = "magnawest")
-      } else if (selectcoords == 3) {
-        datacoords<- trans.coord(data= coordsajust,
-                                   id = coordsajust$occurrenceID,
-                                 lon =coordsajust$verbatimLongitude,
-                                 lat =coordsajust$verbatimLatitude,
-                                   coordreference = "magnabta")
-      } else if (selectcoords == 4) {
-        datacoords<- trans.coord(data= coordsajust,
-                                   id = coordsajust$occurrenceID,
-                                  lon =coordsajust$verbatimLongitude,
-                                  lat =coordsajust$verbatimLatitude,
-                                   coordreference = "magnaeast")
-      } else if (selectcoords == 5) {
-        datacoords<- trans.coord(data= coordsajust,
-                                   id = coordsajust$occurrenceID,
-                                   lon =coordsajust$verbatimLongitude,
-                                   lat =coordsajust$verbatimLatitude,
-                                   coordreference = "magnafareast")
-      } else if (selectcoords == 6) {
-        datacoords<- trans.coord(data= coordsajust,
-                                 id = coordsajust$occurrenceID,
-                                 lon =coordsajust$verbatimLongitude,
-                                 lat =coordsajust$verbatimLatitude,
-                                 coordreference = "magnacolombia")
-      }
+
+      datacoords <- trans.coord(
+          data = coordsajust,
+          id = coordsajust$occurrenceID,
+          lon =coordsajust$verbatimLongitude,
+          lat =coordsajust$verbatimLatitude,
+          coordreference = gdbCRS  # This is a global variable comming from db_to_dwc_simp
+      )
     })
   })
 

@@ -55,46 +55,12 @@ trans.coord<-function(data=x, id= x$x,  lon= x$x, lat= x$x,coordreference = NA) 
     if (length(no.coords)>0){
       coords <- coords[-no.coords,]}
     coordinates(coords) =~ decimalLongitude + decimalLatitude
-    
-    #geographical coordiantes
+
     wgs84<-"+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0" #ESPG 4326
-    #Planar coordiantes
-    magnafarwest<-"+proj=tmerc +lat_0=4.596200416666666 +lon_0=-80.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs" #ESPG 3114
-    magnawest<-"+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs" #ESPG 3115
-    magnabta<-"+proj=tmerc +lat_0=4.596200416666666 +lon_0=-74.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs" #ESPG 3116
-    magnaeast<- "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-71.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs" #ESPG 3117
-    magnafareast <-"+proj=tmerc +lat_0=4.596200416666666 +lon_0=-68.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs" # ESPG 3118
-    magnacolombia <- "+proj=tmerc +lat_0=4 +lon_0=73 +k=0.9992 +x_0=5000000 +y_0=2000000 +ellps=GRS80 +units=m"
      
-    if ('magnafarwest' %in% coordreference) {
-          proj4string(coords)<-magnafarwest
-          coords <- spTransform(coords, wgs84)
-          coords2<-as.data.frame(coords)
-          }else if ('magnawest' %in% coordreference) {
-            proj4string(coords)<-magnawest
-            coords <- spTransform(coords, wgs84)
-            coords2<-as.data.frame(coords)
-          }else if ('magnabta' %in% coordreference) {
-            proj4string(coords)<-magnabta
-            coords <- spTransform(coords, wgs84)
-            coords2<-as.data.frame(coords)
-          }else if ('magnaeast' %in% coordreference) {
-            proj4string(coords)<-magnaeast
-            coords <- spTransform(coords, wgs84)
-            coords2<-as.data.frame(coords)
-          }else if ('magnafareast' %in% coordreference) {
-            proj4string(coords)<-magnafareast
-            coords <- spTransform(coords, wgs84)
-            coords2<-as.data.frame(coords)
-          }else if ('magnacolombia' %in% coordreference) {
-            proj4string(coords)<-magnacolombia
-            coords <- spTransform(coords, wgs84)
-            coords2<-as.data.frame(coords)
-           }else if (is.na (coordreference)){
-            return(print("Debe definir el sistema de referencia"))
-          }else if (is.character(coordreference)) {  
-            return(print("Debe definir el sistema de referencia de manera correcta"))
-          } else NULL
+    proj4string(coords) <- coordreference
+    coords <- spTransform(coords, wgs84)
+    coords2<-as.data.frame(coords)
      
   data<-merge(data, coords2, by = 'occurrenceID', all.x = T, all.y= F)
   data$geodeticDatum <- "EPSG:4326"

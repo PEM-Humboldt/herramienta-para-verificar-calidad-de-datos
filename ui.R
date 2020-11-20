@@ -52,11 +52,8 @@ shinyUI(pageWithSidebar(
                                 uiOutput("varx"),uiOutput("vary"),
 
                                 #origen datos
-                                tags$strong("Origen de los datos"),
-                                tags$p(" Seleccione un sistema de referencia"),
-                                selectInput(inputId = "coordSrc",label = "",
-                                            choices = c("Oeste - Oeste (ESPG 3114)"= 1, "Oeste (ESPG 3115)"= 2, "Bogota (ESPG 3116)"= 3, "Este (ESPG 3117)"= 4, "Este - Este (ESPG 3118)" =5, "Nacional (EPSG: 9377)" = 6),
-                                            selected = NULL),
+                                tags$strong("Transformacion de coordenadas"),
+                                helpText("Haga click en Transformar para reproyectar las coordenadas a WGS84"),
                                 actionButton("coordBtn", "Transformar"),
 
                                 tags$hr(),

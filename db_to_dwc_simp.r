@@ -12,16 +12,23 @@
 db_to_dwc<-function(x){
   
   library(data.table)
+  library(raster)
   library(rgdal)
   library(sf)
+  library(sp)
   library(dplyr)
   library(stringi)
+
+  crsVec <- c()
   
   #Geographical shapes
   if ("PuntoMuestreoFauna" %in% ogrListLayers(x)) {
     
     cat("\n Puntos de Muestreo Fauna\n")
-    Pmf<-  as.data.frame(readOGR(dsn = x, layer ="PuntoMuestreoFauna"))
+    pmfDS <- readOGR(dsn = x, layer ="PuntoMuestreoFauna")
+    pmfCRS <- proj4string(pmfDS)
+    crsVec <- append(crsVec, pmfCRS)
+    Pmf <- as.data.frame(pmfDS)
     colnames(Pmf)<-toupper(colnames(Pmf))
     
     oldnames2<-c("OPERADOR", "VEREDA", "MUNICIPIO", "DEPTO", "NOMBRE", "ID_MUES_PT", "T_MUEST", "HABITAT", "DESCRIP", "FEC_MUEST", "CUERPO_AGU", "COTA", "COOR_ESTE", "COOR_NORTE")
@@ -32,10 +39,14 @@ db_to_dwc<-function(x){
   } else NULL
   
   if ("TransectoMuestreoFauna" %in% ogrListLayers(x)) {
-    cat(" \n Transeco de Muestreo Fauna \n ")
-    tmf<- as.data.frame(as((readOGR(dsn = x, layer ="TransectoMuestreoFauna")),"SpatialPointsDataFrame"))
-    tmf<-tmf[!duplicated(tmf$Lines.ID),]
-    colnames(tmf)<-toupper(colnames(tmf))
+
+    cat(" \n Transecto de Muestreo Fauna \n ")
+    tmfDS <- readOGR(dsn = x, layer ="TransectoMuestreoFauna")
+    tmfCRS <- proj4string(tmfDS)
+    crsVec <- append(crsVec, tmfCRS)
+    tmf <- as.data.frame(as((tmfDS),"SpatialPointsDataFrame"))
+    tmf <- tmf[!duplicated(tmf$Lines.ID),]
+    colnames(tmf) <- toupper(colnames(tmf))
                            
     oldnames0<-c("OPERADOR", "VEREDA", "MUNICIPIO", "DEPTO", "NOMBRE", "ID_MUES_TR", "T_TRANSEC", "HABITAT", "DESCRIP", "FEC_MUEST", "CUERPO_AGU", "COTA_MIN", "COORDS.X1", "COORDS.X2" )
     newnames0<- c("institutionCode", "locality", "county", "stateProvince", "parentEventID", "eventID", "samplingProtocol", "habitat", "samplingEffort", "eventDate", "waterBody", "minimumElevationInMeters", "verbatimLongitude", "verbatimLatitude")
@@ -46,8 +57,12 @@ db_to_dwc<-function(x){
   
   
   if ("PuntoMuestreoFlora" %in% ogrListLayers(x)) {
+    
     cat("\n  Puntos de Muestreo Flora \n")
-    pmfr<-  as.data.frame(st_read(dsn = x, layer ="PuntoMuestreoFlora"))
+    pmfrDS <- readOGR(dsn = x, layer ="PuntoMuestreoFlora")
+    pmfrCRS <- proj4string(pmfrDS)
+    crsVec <- append(crsVec, pmfrCRS)
+    pmfr <-  as.data.frame(st_read(dsn = x, layer ="PuntoMuestreoFlora"))
     colnames(pmfr)<-toupper(colnames(pmfr))
     
     oldnames3<-c("OPERADOR", "VEREDA", "MUNICIPIO", "DEPTO", "NOMBRE", "ID_MUEST", "N_COBERT", "T_MUEST",  "CUERPO_AGU", "DESCRIP", "FEC_MUEST", "COTA", "COOR_ESTE", "COOR_NORTE")
@@ -57,6 +72,18 @@ db_to_dwc<-function(x){
     rm(oldnames3, newnames3)
   } else NULL  
   
+
+    # Check if all CRS are the equal
+    if (length(unique(crsVec)) > 1) {
+        stop(
+            safeError(
+                "Los sistemas de refencia de las capas geograficas dentro de la GDB no coinciden. Asegurese que sean iguales para poder continuar."
+            )
+        )
+    }
+
+    gdbCRS <<- crsVec[1]
+
   #tables with biological information  
   if ("MuestreoFaunaTB" %in% ogrListLayers(x)) {
     cat("\n  Datos de Muestreo Fauna  Punto\n")
