@@ -1,0 +1,25 @@
+name: herramienta-calidad-datos
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - r
+  - r-data.table
+  - r-dplyr
+  - r-dt
+  - r-fs
+  - r-ggplot2
+  - r-hmisc
+  - r-knitr
+  - r-leaflet
+  - r-maptools
+  - r-mapview
+  - r-raster
+  - r-rgdal
+  - r-shiny
+  - r-sf
+  - r-shinyfiles
+  - r-sp
+  - r-stringi
+  - r-taxize
+  - r-r.utils
