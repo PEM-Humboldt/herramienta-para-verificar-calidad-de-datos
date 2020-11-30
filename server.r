@@ -233,23 +233,27 @@ shinyServer(function(input, output, session) {
 
   # Carga la localidad y cruza con shapefiles BioModelos.
   # spec_cross representa la tabla producto del cruce BioModelos * localidad.
-  spec_cross <-eventReactive(input$locality, {
-    if (!exists("maps")) {
-        maps <- st_read("./appData/biomodelos_mod4.shp") # Cargar archivo shapefile BioModelos.
-        maps <<- as(maps, "Spatial")
-    }
-    temp<-cbind(input$long, input$lat)
-    temp<-as.data.frame(temp)
-    colnames(temp)<-c("x","y")
-    temp <- SpatialPointsDataFrame(temp,temp)
-    crs(temp) <- "+proj=longlat +datum=WGS84 +no_defs"
-    species <- as.data.frame(over(temp,maps,returnList = TRUE))
-    if (!is.null(input$bmInput)) {
-      bmFile <- input$bmInput
-      records <<- as.data.frame(fread(bmFile$datapath, colClasses = "character", header = TRUE, encoding = "Latin-1"))
-      species$Coincidencia <- species$X1.nom_sp %in% records$scientificName
-    }
+  spec_cross <- eventReactive(input$locality, {
+    withProgress(message = 'Realizando consulta a BioModelos', min = 0, max = 1, {
+        if (!exists("maps")) {
+            incProgress(0.2, detail = "Leyendo modelos...")
+            maps <<- st_read("./appData/biomodelos_mod4.shp") # Cargar archivo shapefile BioModelos.
+            maps <<- as(maps, "Spatial")
+        }
+        temp<-cbind(input$long, input$lat)
+        temp<-as.data.frame(temp)
+        colnames(temp)<-c("x","y")
+        temp <- SpatialPointsDataFrame(temp,temp)
+        crs(temp) <- "+proj=longlat +datum=WGS84 +no_defs"
+        incProgress(0.5, detail = "Cruzando informacion...")
+        species <- as.data.frame(over(temp,maps,returnList = TRUE))
+        if (!is.null(input$bmInput)) {
+        bmFile <- input$bmInput
+        records <<- as.data.frame(fread(bmFile$datapath, colClasses = "character", header = TRUE, encoding = "Latin-1"))
+        species$Coincidencia <- species$X1.nom_sp %in% records$scientificName
+        }
     return(species)
+    })
     })
 
   # Muestra la tabla en el panel principal.
