@@ -1,3 +1,4 @@
+_[Archived project] This project has been discontinued_
 # Herramienta para verificar calidad de datos
 Herramienta para la verificación geográfica y taxonómica de registros biológicos.
 
